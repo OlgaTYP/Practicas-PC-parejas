@@ -1,6 +1,6 @@
 package com.example.todo.model;
 
-/** Niveles de prioridad de una tarea: BAJA, MEDIA o ALTA. */
+/** Niveles de prioridad que se asigna a cada tarea: BAJA, MEDIA o ALTA. */
 public enum Prioridad {
   BAJA,
   MEDIA,
