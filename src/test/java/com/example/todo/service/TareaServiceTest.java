@@ -126,6 +126,27 @@ class TareaServiceTest {
         assertThat(enProgreso).extracting(Tarea::getTitulo).containsExactly("Tarea A");
     }
 
+    @Test
+    void listarVencidas_devuelveSoloTareasNoCompletadasConFechaAnteriorAHoy() {
+        LocalDateTime creada = HOY.minusDays(30).atStartOfDay();
+        repositorio.guardar(new Tarea("Vencida pendiente", null, Prioridad.MEDIA, HOY.minusDays(1), creada));
+        Tarea vencidaCompletada = new Tarea("Vencida completada", null, Prioridad.MEDIA, HOY.minusDays(2), creada);
+        vencidaCompletada.setEstado(EstadoTarea.COMPLETADA);
+        repositorio.guardar(vencidaCompletada);
+        repositorio.guardar(new Tarea("Vence hoy", null, Prioridad.MEDIA, HOY, creada));
+        repositorio.guardar(new Tarea("Vence mañana", null, Prioridad.MEDIA, HOY.plusDays(1), creada));
+        repositorio.guardar(new Tarea("Sin fecha", null, Prioridad.BAJA, null, creada));
+
+        List<Tarea> vencidas = servicio.listarVencidas();
+
+        assertThat(vencidas).extracting(Tarea::getTitulo).containsExactly("Vencida pendiente");
+    }
+
+    @Test
+    void listarVencidas_sinTareas_devuelveListaVacia() {
+        assertThat(servicio.listarVencidas()).isEmpty();
+    }
+
     // ---------- cambiarEstado ----------
 
     @Test

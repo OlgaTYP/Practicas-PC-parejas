@@ -51,6 +51,11 @@ public class TareaController {
         return servicio.listar(estado, prioridad).stream().map(TareaResponse::desde).toList();
     }
 
+    @GetMapping("/vencidas")
+    public List<TareaResponse> listarVencidas() {
+        return servicio.listarVencidas().stream().map(TareaResponse::desde).toList();
+    }
+
     @GetMapping("/{id}")
     public TareaResponse obtener(@PathVariable Long id) {
         return TareaResponse.desde(servicio.obtener(id));

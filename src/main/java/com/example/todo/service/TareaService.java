@@ -61,6 +61,14 @@ public class TareaService {
                 .toList();
     }
 
+    public List<Tarea> listarVencidas() {
+        LocalDate hoy = LocalDate.now(reloj);
+        return repositorio.buscarTodas().stream()
+                .filter(t -> t.getEstado() != EstadoTarea.COMPLETADA)
+                .filter(t -> t.getFechaLimite() != null && t.getFechaLimite().isBefore(hoy))
+                .toList();
+    }
+
     public Tarea actualizar(Long id, TareaRequest peticion) {
         Tarea tarea = obtener(id);
         if (tarea.getEstado() == EstadoTarea.COMPLETADA) {
