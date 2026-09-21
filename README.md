@@ -85,3 +85,15 @@ curl -i -X POST localhost:8080/api/tareas -H "Content-Type: application/json" \
 # Eliminar
 curl -i -X DELETE localhost:8080/api/tareas/1
 ```
+
+## Formato del código
+
+Uso Spotless (con el estilo de Google) para que todo el código tenga el mismo formato.
+
+- `mvn spotless:check` comprueba si el código está bien formateado.
+- `mvn spotless:apply` lo formatea.
+
+Hay un hook de pre-commit en `.githooks/` que ejecuta `spotless:apply` antes de cada commit.
+Después de clonar el repositorio hay que activarlo una vez con:
+
+    git config core.hooksPath .githooks
