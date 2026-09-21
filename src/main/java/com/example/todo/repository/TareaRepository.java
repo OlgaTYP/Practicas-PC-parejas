@@ -1,20 +1,19 @@
 package com.example.todo.repository;
 
+import com.example.todo.model.EstadoTarea;
+import com.example.todo.model.Tarea;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.todo.model.EstadoTarea;
-import com.example.todo.model.Tarea;
-
 public interface TareaRepository {
 
-    Tarea guardar(Tarea tarea);
+  Tarea guardar(Tarea tarea);
 
-    Optional<Tarea> buscarPorId(Long id);
+  Optional<Tarea> buscarPorId(Long id);
 
-    List<Tarea> buscarTodas();
+  List<Tarea> buscarTodas();
 
-    long contarPorEstado(EstadoTarea estado);
+  long contarPorEstado(EstadoTarea estado);
 
-    void eliminarPorId(Long id);
+  void eliminarPorId(Long id);
 }
