@@ -3,6 +3,22 @@
 API REST de gestión de tareas con **Spring Boot 3.5**, **Java 21** y **Maven**.
 Persistencia en memoria (los datos se pierden al parar la aplicación).
 
+## Requisitos
+
+- Git
+- JDK 21
+- Maven 3.9 o superior
+
+## Puesta en marcha desde cero
+
+    git clone https://github.com/mariaballesteer/Practicas-PC-parejas.git
+    cd Practicas-PC-parejas
+    git config core.hooksPath .githooks
+    mvn clean package
+    java -jar target/todo-api.jar
+
+El `git config` activa el hook de pre-commit, que necesita Maven para formatear el código antes de cada commit. La API queda escuchando en http://localhost:8080.
+
 ## Arquitectura
 
 ```
