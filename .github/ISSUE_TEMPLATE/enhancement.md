@@ -1,6 +1,6 @@
-name: Mejora
-about: Propón una mejora o una funcionalidad nueva para la API
-title: "[Mejora]"
+name: Mejora  
+about: Propón una mejora o una funcionalidad nueva para la API  
+title: "[Mejora]"  
 labels: enhancement
 
 # Qué se quiere conseguir
