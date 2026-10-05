@@ -1,6 +1,8 @@
 package com.example.todo.service;
 
+import com.example.todo.dto.EstadisticasResponse;
 import com.example.todo.dto.TareaRequest;
+import com.example.todo.exception.ParametroInvalidoException;
 import com.example.todo.exception.ReglaNegocioException;
 import com.example.todo.exception.TareaNoEncontradaException;
 import com.example.todo.model.EstadoTarea;
@@ -12,7 +14,9 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 
@@ -100,6 +104,24 @@ public class TareaService {
         .toList();
   }
 
+  public List<Tarea> buscar(String texto) {
+    if (texto == null || texto.isBlank()) {
+      throw new ParametroInvalidoException(
+          "El parámetro 'q' es obligatorio y no puede estar vacío");
+    }
+    String textoNormalizado = texto.trim().toLowerCase();
+    return repositorio.buscarTodas().stream()
+        .filter(
+            t ->
+                contieneTexto(t.getTitulo(), textoNormalizado)
+                    || contieneTexto(t.getDescripcion(), textoNormalizado))
+        .toList();
+  }
+
+  private boolean contieneTexto(String campo, String textoNormalizado) {
+    return campo != null && campo.toLowerCase().contains(textoNormalizado);
+  }
+
   public Tarea actualizar(Long id, TareaRequest peticion) {
     Tarea tarea = obtener(id);
     if (tarea.getEstado() == EstadoTarea.COMPLETADA) {
@@ -145,6 +167,24 @@ public class TareaService {
       throw new ReglaNegocioException("No se puede eliminar una tarea que está en progreso");
     }
     repositorio.eliminarPorId(id);
+  }
+
+  public EstadisticasResponse estadisticas() {
+    Map<EstadoTarea, Long> porEstado = new EnumMap<>(EstadoTarea.class);
+    for (EstadoTarea estado : EstadoTarea.values()) {
+      porEstado.put(estado, 0L);
+    }
+    Map<Prioridad, Long> porPrioridad = new EnumMap<>(Prioridad.class);
+    for (Prioridad prioridad : Prioridad.values()) {
+      porPrioridad.put(prioridad, 0L);
+    }
+
+    for (Tarea tarea : repositorio.buscarTodas()) {
+      porEstado.merge(tarea.getEstado(), 1L, Long::sum);
+      porPrioridad.merge(tarea.getPrioridad(), 1L, Long::sum);
+    }
+
+    return new EstadisticasResponse(porEstado, porPrioridad);
   }
 
   // ---------- validaciones privadas ----------

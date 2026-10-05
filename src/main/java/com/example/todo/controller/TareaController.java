@@ -1,6 +1,7 @@
 package com.example.todo.controller;
 
 import com.example.todo.dto.CambioEstadoRequest;
+import com.example.todo.dto.EstadisticasResponse;
 import com.example.todo.dto.TareaRequest;
 import com.example.todo.dto.TareaResponse;
 import com.example.todo.model.EstadoTarea;
@@ -63,9 +64,19 @@ public class TareaController {
     return servicio.listarVencidas().stream().map(TareaResponse::desde).toList();
   }
 
+  @GetMapping("/buscar")
+  public List<TareaResponse> buscar(@RequestParam String q) {
+    return servicio.buscar(q).stream().map(TareaResponse::desde).toList();
+  }
+
   @GetMapping("/{id}")
   public TareaResponse obtener(@PathVariable Long id) {
     return TareaResponse.desde(servicio.obtener(id));
+  }
+
+  @GetMapping("/estadisticas")
+  public EstadisticasResponse estadisticas() {
+    return servicio.estadisticas();
   }
 
   @PutMapping("/{id}")
